@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>main</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+</head>
+<body>
+  <div class="card container w-50 my-3">
+    <h4>Type your name to connect</h4>
+    <form action="/chat" method="POST" id="reg-form">
+      <input id="reg-input" name="input" type="text">
+      <button id="reg-btn" type="submit">Connect</button>
+    </form>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+  var socket = io();
+  $(document).ready( function() {
+    $("#reg-form").submit(function(e){
+      // e.preventDefault();
+      // $.post({
+      //   url: '/',
+      //   name: $('#reg-input').val()
+      // }).done(function( name ){
+
+      // })
+      
+      // $('#reg-input').val('');
+
+    });
+  })
+  </script>
+</body>
+</html>

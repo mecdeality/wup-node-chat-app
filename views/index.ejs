@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>main</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="card container w-50 my-3">
+    <div style="height: auto" class="top">
+      <h1><i id="name"><%= name %></i>'s page</h1>
+      <hr>
+      <div class="chat-body">
+        <div class="d-flex flex-row-reverse">You Joined</div><hr>
+      </div>
+    </div>
+    <div class="bottom mt-5">
+      <form id="msg-form">
+        <input id="msg-input" type="text">
+        <button id="msg-btn" type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+    $(document).ready(function () {
+      $("#msg-form").submit(function (e) {
+        e.preventDefault();
+        socket.emit('msg-send', $('#msg-input').val());
+        $(".chat-body").append("<div class=\"d-flex flex-row-reverse\">" + $('#msg-input').val() + "</div><hr>");
+        $('#msg-input').val('');
+      });
+      socket.emit('reg-name', $('#name').text());
+
+      socket.on('user-joined', name => {
+        $(".chat-body").append("<div>" + name + " joined <hr></div>");
+      })
+
+      socket.on('user-disconnected', name => {
+        $(".chat-body").append("<div style=\"background-color:red\">" + name + " is disconnected <hr></div>");
+      })
+      function getRandomColor() {
+        let letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+      var color = getRandomColor();
+
+      socket.on('msg-get', data => {
+        $(".chat-body").append("<div><b style=\"color:"+color+" \">"+data.name+":</b> " + data.data + "<hr></div>");
+      })
+
+      socket.on('redirect', path => {
+        window.location.href = path; 
+      });
+
+
+
+    });
+  </script>
+</body>
+
+</html>
